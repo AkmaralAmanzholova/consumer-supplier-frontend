@@ -12,6 +12,25 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => {
     return localStorage.getItem("token") || null;
   });
+  
+  const demoLogin = (role = "owner") => {
+    const demoUser = {
+      id: "demo",
+      email: "demo@example.com",
+      username: "demo",
+      role, 
+      is_demo: true,
+    };
+
+    const demoToken = "demo-token";
+
+    localStorage.setItem("token", demoToken);
+    localStorage.setItem("user", JSON.stringify(demoUser));
+    setToken(demoToken);
+    setUser(demoUser);
+
+    return demoUser;
+  };
 
   const login = async (email, password) => {
     const base = import.meta.env.VITE_API_URL || "http://localhost:8000";
@@ -21,12 +40,17 @@ export function AuthProvider({ children }) {
     body.set("username", email);    
     body.set("password", password);
 
-    const res = await fetch(`${base}/token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body,
-    });
-
+    let res;
+    try {
+      res = await fetch(`${base}/token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+    } catch (e) {
+      return demoLogin("owner");
+    }
+    
     if (!res.ok) {
       let msg = "Invalid credentials";
       try {
@@ -43,9 +67,15 @@ export function AuthProvider({ children }) {
     localStorage.setItem("token", accessToken);
     setToken(accessToken);
 
-    const meRes = await fetch(`${base}/users/me/`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    let meRes;
+    try {
+      meRes = await fetch(`${base}/users/me/`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+    } catch (e) {
+      return demoLogin("owner");
+    }
+
     if (!meRes.ok) throw new Error("Failed to fetch current user");
 
     const userData = await meRes.json();
@@ -83,6 +113,7 @@ export function AuthProvider({ children }) {
         user, 
         token, 
         login, 
+        demoLogin,
         logout, 
         handle401Error,
         ...roleDetection, // isOwner, isManager, isSales, isLoading

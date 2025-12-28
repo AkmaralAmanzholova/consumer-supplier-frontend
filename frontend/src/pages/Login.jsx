@@ -15,7 +15,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, demoLogin } = useAuth();
 
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [pwd, setPwd] = useState("");
@@ -130,6 +130,17 @@ export default function Login() {
 
           <Button type="submit" variant="contained" size="large" sx={{ mt: 0.5, py: 1.2 }} disabled={!canSubmit}>
             {loading ? "Signing in..." : "LOGIN"}
+          </Button>
+          <Button
+            variant="outlined"
+            size="large"
+            sx={{ py: 1.2 }}
+            onClick={() => {
+              demoLogin("owner");
+              navigate("/dashboard");
+            }}
+          >
+            Войти в демо-режиме
           </Button>
         </Box>
       </Paper>

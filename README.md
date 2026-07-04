@@ -10,7 +10,7 @@ Demo Link: https://consumer-supplier-frontend.vercel.app/ (only frontend is depl
 
 ## Project Structure
 
-This repository contains the **frontend** application. The backend is maintained in a [separate repository](BACKEND_SETUP.md).
+This repository contains the **frontend** application. The backend is maintained in a separate repository.
 
 ## Quick Start
 
@@ -37,12 +37,4 @@ This repository contains the **frontend** application. The backend is maintained
    npm run dev
    ```
 
-The frontend will run on `http://localhost:5173` (or next available port).
-
-## Backend Integration
-
-See [BACKEND_SETUP.md](BACKEND_SETUP.md) for details on backend configuration and connection.
-
-## Note
-
-The `backend/` folder in this repository is kept for local reference only. For the latest backend code, refer to the separate backend repository.
+The frontend will run on `http://localhost:5173` (or next available port)
